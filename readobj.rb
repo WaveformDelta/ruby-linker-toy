@@ -183,7 +183,7 @@ class ObjFile
 	end
 end
 
-ofile = ObjFile.new("ch4main.lk")
+ofile = ObjFile.new("main.lk")
 
 puts ofile.sourcefile + " ==========================="
 printf("%d segments, %d symbols, %d relocations\n", ofile.nsegs, ofile.nsyms, ofile.nrlocs)
@@ -191,6 +191,7 @@ printf("%d segments, %d symbols, %d relocations\n", ofile.nsegs, ofile.nsyms, of
 puts "\nSegments: =========================="
 ofile.segrecs.each do |seg|
   printf("Name: %s, Loc: %x, Size: %x, Type: %s\n", seg[:name], seg[:loc], seg[:size], seg[:type])
+  printf("Data: %s...\n", seg[:data].bin2hex[0..16]) if /P/===seg[:type]
 end
 
 puts "\nSymbols: ==========================="
