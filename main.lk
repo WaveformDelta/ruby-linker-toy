@@ -1,0 +1,21 @@
+LINK
+3 2 3
+# segments: name base length flags
+# this uses the common convention that text starts at zero,
+# data starts on the next page after text, bss starts at the
+# next word after data
+#
+# for the moment, there's no data
+.text 0    20 RP
+.data 1000 18 RWP
+.bss  1018 50 RW
+# symbols
+main 0 1 D
+wiggleroom 100 0 U
+# relocations
+0e 00 01 A4
+12 00 01 R4
+08 01 01 A4
+# data
+9F631248973FE8DCCA4A4A49210EBBBBBB9302FDECAA206720012ECBB9A9A330
+634838DA4A410BB000002FCA0123456782ECBB9A9A33ABC0

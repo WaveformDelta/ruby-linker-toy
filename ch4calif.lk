@@ -1,0 +1,9 @@
+LINK
+3 2 0
+# segments: name base length flags
+.text 0    920 R
+.data 1000 217 RW
+.bss  1218 100  RW
+# symbols
+mellowize 10 1 D
+hottub 42 0 U
