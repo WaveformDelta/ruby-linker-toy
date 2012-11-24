@@ -7,7 +7,8 @@ require 'objfile'
 
 exit if ARGV.size < 1
 
-ofile = ObjFile.new(ARGV[0])
+ofile = ObjFile.new
+ofile.loadobject(ARGV[0])
 
 puts ofile.sourcefile + " ==========================="
 printf("%d segments, %d symbols, %d relocations\n", ofile.nsegs, ofile.nsyms, ofile.nrlocs)

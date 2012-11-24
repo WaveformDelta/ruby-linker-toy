@@ -10,6 +10,7 @@ require 'objfile'
 
 exit if ARGV.size < 2
 
-ofile = ObjFile.new(ARGV[0])
+ofile = ObjFile.new
+ofile.loadobject(ARGV[0])
 ofile.writeobject(ARGV[1])
 
