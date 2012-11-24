@@ -233,17 +233,17 @@ class ObjFile
     
     # Write the segment records
     @segrecs.each do |seg|
-      output << sprintf("%s %x %x %s\n", seg[:name], seg[:loc], seg[:size], seg[:type])
+      output << sprintf("%s %02x %02x %s\n", seg[:name], seg[:loc], seg[:size], seg[:type])
     end
     
     # Write the symbol records
     @symrecs.each do |sym|
-      output << sprintf("%s %x %x %s\n", sym[:name], sym[:value], sym[:seg], sym[:type])
+      output << sprintf("%s %02x %02x %s\n", sym[:name], sym[:value], sym[:seg], sym[:type])
     end
     
     # Write the relocation records
     @rlocrecs.each do |rloc|
-      output << sprintf("%x %x %x %s %s\n", rloc[:loc], rloc[:seg], rloc[:ref], rloc[:type], rloc[:extra])
+      output << sprintf("%02x %02x %02x %s %s\n", rloc[:loc], rloc[:seg], rloc[:ref], rloc[:type], rloc[:extra])
     end
     
     # Write the binary data
