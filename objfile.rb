@@ -82,8 +82,10 @@ class ObjFile
 	  @nsegs = @nsyms = @nrlocs = 0
 
 	  # Create empty tables
-	  @segrecs = [], @segnames = {}
-	  @symrecs = [], @symnames = {}
+	  @segrecs = []
+	  @segnames = {}
+	  @symrecs = []
+	  @symnames = {}
 	  @rlocrecs = []
 	end
 
