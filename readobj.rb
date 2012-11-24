@@ -1,7 +1,44 @@
-#===================================================================
+#====================================================================
+# readobj: read and write object files
+#
+# In each of the hashes below, there may be extra fields beyond
+# the ones listed
+#
+# An object file is a hash with these fields:
+# sourcename => file or archive name, if any
+# nsegs => # of segments
+# nsyms => # of symbols
+# nrlocs => # of relocs
+# segnames => hash names to segment numbers (below)
+# segrecs => [] array of segments
+# symnames => hash names to symbol numbers
+# symrecs => [] array of symbols (below)
+# rlocrecs => [] array of relocs (below)
+#
+# A segment is a hash with these fields:
+# segno => segment number
+# base => base address as a number (not a hex string)
+# size => size as a number (not a hex string)
+# flags => flag characters
+# data => data as a byte string (not a hex string)
+#
+# A symbol is a hash with these fields:
+# name => symbol name
+# symno => symbol number
+# value => symbol value as a number (not a hex string)
+# seg => segment number
+# type => type
+#
+# A reloc is a hash with these fields:
+# loc => location
+# seg => segment number
+# ref => reference segment or symbol number
+# type => relocation type
+#======================================================================
+#======================================================================
 # Open the String class, add hex2bin and bin2hex methods
 #   see http://stackoverflow.com/questions/862140/hex-to-binary-in-ruby
-#===================================================================
+#======================================================================
 class String
 	
 	def hex2bin
