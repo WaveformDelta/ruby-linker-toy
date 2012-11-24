@@ -218,4 +218,28 @@ class ObjFile
 	  rloc[:extra] = extra  # Always include extra, even if it's nil
 	  return rloc
 	end
+  
+  #==================================================================
+  # Write this object file to disk using the given name
+  # If the file exists, its contents will be overwritten
+  #==================================================================
+  
+  def writeobject(outname)
+    output = File.open(outname, "w")
+    
+    output << "LINK\n"
+    output << sprintf("%d %d %d\n", @nsegs, @nsyms, @nrlocs)
+    
+    @segrecs.each do |seg|
+      output << sprintf("%s %x %x %s\n", seg[:name], seg[:loc], seg[:size], seg[:type])
+    end
+    
+    @symrecs.each do |sym|
+      output << sprintf("%s %x %x %s\n", sym[:name], sym[:value], sym[:seg], sym[:type])
+    end
+    
+    @rlocrecs.each do |rloc|
+      output << sprintf("%x %x %x %s %s\n", rloc[:loc], rloc[:seg], rloc[:ref], rloc[:type], rloc[:extra])
+    end
+  end
 end
