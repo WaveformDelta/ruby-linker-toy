@@ -35,3 +35,13 @@ Bon Appetit!!
 
 WaveformDelta
 11/23/2012
+
+COMMENTS
+==========================================================================================
+
+11/24/2012
+----------
+
+I now have a script that satisfies project 3.1, reading an object file into tables and then writing an equivalent file back to disk.  I did not need to worry about renumbering symbols in any of the records.  On the other hand, I do make it possible to specify the output name on the command line.
+
+I like my OO approach, wherein I use a method on ObjFile to make it write itself to disk.  I think I'll revise my design to not require ObjFile to initialize itself from an existing file; that way I can make an 'empty' ObjFile and add things to it from other loaded ObjFiles.
