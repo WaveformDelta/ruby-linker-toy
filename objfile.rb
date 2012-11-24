@@ -227,19 +227,30 @@ class ObjFile
   def writeobject(outname)
     output = File.open(outname, "w")
     
+    # Write the header
     output << "LINK\n"
     output << sprintf("%d %d %d\n", @nsegs, @nsyms, @nrlocs)
     
+    # Write the segment records
     @segrecs.each do |seg|
       output << sprintf("%s %x %x %s\n", seg[:name], seg[:loc], seg[:size], seg[:type])
     end
     
+    # Write the symbol records
     @symrecs.each do |sym|
       output << sprintf("%s %x %x %s\n", sym[:name], sym[:value], sym[:seg], sym[:type])
     end
     
+    # Write the relocation records
     @rlocrecs.each do |rloc|
       output << sprintf("%x %x %x %s %s\n", rloc[:loc], rloc[:seg], rloc[:ref], rloc[:type], rloc[:extra])
     end
+    
+    # Write the binary data
+    @segrecs.select {|seg| /P/===seg[:type]}.each do |seg|
+      output << seg[:data].bin2hex + "\n"
+    end
+    
+    output.close
   end
 end
