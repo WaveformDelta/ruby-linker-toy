@@ -70,41 +70,56 @@ class ObjFile
 	#===================================================================
 	# Give an filename, load parse an object file
 	#===================================================================
+	def initialize
+	  resetobject
+	end
 	
-	def initialize(filename)
-		begin
-      @sourcefile = filename
-      
-			File.open(filename, "r") do |objfile|
-				unless getl(objfile) == "LINK"
-					puts "Invalid file format: " + filename
-					return nil
-				end
+	#===================================================================
+	# Zero out all data values
+	#===================================================================
+	def resetobject
+	  # Zero out the element counts
+	  @nsegs = @nsyms = @nrlocs = 0
 
-				# Read header info
-				@nsegs, @nsyms, @nrlocs = getl(objfile).split(' ').collect {|x| x.to_i}
-				
-				# Parse segs
-				@segrecs = [], @segnames = {}
-				gather_segs(objfile)
-				
-				# Parse symbols
-				@symrecs = [], @symnames = {}
-				gather_syms(objfile)
-				
-				# Parse relocations
-				@rlocrecs = []
-				gather_rlocs(objfile)
-				
-				# Slurp in data
-				@segrecs.select {|seg| /P/===seg[:type]}.each do |seg|
-					seg[:data] = getl(objfile).hex2bin
-				end
+	  # Create empty tables
+	  @segrecs = [], @segnames = {}
+	  @symrecs = [], @symnames = {}
+	  @rlocrecs = []
+	end
 
-			end
-		rescue
-			puts "Could not open object file: " + filename
+	#=================================================================
+	# Load an object file and parse it into tables
+	#=================================================================
+	def loadobject(filename)
+	  begin
+		@sourcefile = filename
+
+		File.open(filename, "r") do |objfile|
+		  unless getl(objfile) == "LINK"
+			puts "Invalid file format: " + filename
+			return nil
+		  end
+
+		  # Read header info
+		  @nsegs, @nsyms, @nrlocs = getl(objfile).split(' ').collect {|x| x.to_i}
+
+		  # Parse segs
+		  gather_segs(objfile)
+
+		  # Parse symbols
+		  gather_syms(objfile)
+
+		  # Parse relocations
+		  gather_rlocs(objfile)
+
+		  # Slurp in data
+		  @segrecs.select {|seg| /P/===seg[:type]}.each do |seg|
+			seg[:data] = getl(objfile).hex2bin
+		  end
 		end
+	  rescue
+		  puts "Could not open object file: " + filename
+	  end
 	end
 
 	#===================================================================
