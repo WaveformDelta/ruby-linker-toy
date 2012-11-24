@@ -5,7 +5,9 @@
 #=========================================================
 require 'objfile'
 
-ofile = ObjFile.new("obj/main.lk")
+exit if ARGV.size < 1
+
+ofile = ObjFile.new(ARGV[0])
 
 puts ofile.sourcefile + " ==========================="
 printf("%d segments, %d symbols, %d relocations\n", ofile.nsegs, ofile.nsyms, ofile.nrlocs)
