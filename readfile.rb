@@ -15,12 +15,14 @@ printf("%d segments, %d symbols, %d relocations\n", ofile.nsegs, ofile.nsyms, of
 
 puts "\nSegments: =========================="
 ofile.segrecs.each do |seg|
+  next if seg == nil
   printf("Name: %s, Loc: %x, Size: %x, Type: %s\n", seg[:name], seg[:loc], seg[:size], seg[:type])
   printf("Data: %s...\n", seg[:data].bin2hex[0..16]) if /P/===seg[:type]
 end
 
 puts "\nSymbols: ==========================="
 ofile.symrecs.each do |sym|
+  next if sym == nil
   printf("Name: %s, Value: %x, Segment num: %d, Type: %s\n", sym[:name], sym[:value], sym[:seg], sym[:type])
 end
 
