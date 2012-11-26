@@ -115,7 +115,7 @@ class ObjFile
 		  gather_rlocs(objfile)
 
 		  # Slurp in data
-		  @segrecs.select {|seg| /P/===seg[:type]}.each do |seg|
+		  @segrecs.select {|seg| seg != nil and /P/===seg[:type]}.each do |seg|
 			seg[:data] = getl(objfile).hex2bin
 		  end
 		end
@@ -141,7 +141,10 @@ class ObjFile
 	#===================================================================
 	
 	def gather_segs(fh)
-		(0...@nsegs).each do |segnum|
+    # First segment is nil
+    @segrecs[0] = nil
+    
+		(1..@nsegs).each do |segnum|
 			name, loc, size, type = getl(fh).split(' ')
 					
 			@segrecs[segnum] = build_segrec(segnum, name, loc.hex, size.hex, type)
@@ -176,7 +179,10 @@ class ObjFile
 	#===================================================================
 	
 	def gather_syms(fh)
-		(0...@nsyms).each do |symnum|
+    # First symbol is nil
+    @symrecs[0] = nil
+    
+		(1..@nsyms).each do |symnum|
 			name, value, seg, type = getl(fh).split(' ')
 
 			@symrecs[symnum] = build_symrec(symnum, name, value.hex, seg.hex, type)
@@ -250,11 +256,13 @@ class ObjFile
     
     # Write the segment records
     @segrecs.each do |seg|
+      next if seg == nil
       output << sprintf("%s %02x %02x %s\n", seg[:name], seg[:loc], seg[:size], seg[:type])
     end
     
     # Write the symbol records
     @symrecs.each do |sym|
+      next if sym == nil
       output << sprintf("%s %02x %02x %s\n", sym[:name], sym[:value], sym[:seg], sym[:type])
     end
     
@@ -264,7 +272,7 @@ class ObjFile
     end
     
     # Write the binary data
-    @segrecs.select {|seg| /P/===seg[:type]}.each do |seg|
+    @segrecs.select {|seg| seg != nil and /P/===seg[:type]}.each do |seg|
       output << seg[:data].bin2hex + "\n"
     end
     
