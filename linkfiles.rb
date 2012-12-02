@@ -49,6 +49,7 @@ inputs.each do |object|
   bss = object.segrecs[object.segnames[".bss"]]
   bsssize += bss[:size].roundup(WORDALIGN) if bss
   
+  puts "Segment sizes: Text:%x, Data:%x, BSS:%x" % [text[:size], data[:size], bss[:size]]
   puts "Text size: %x, Data size: %x, BSS size: %x\n" % [textsize, datasize, bsssize]
 end
 
