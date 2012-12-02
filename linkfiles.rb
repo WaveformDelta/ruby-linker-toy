@@ -52,6 +52,13 @@ inputs.each do |object|
   puts "Text size: %x, Data size: %x, BSS size: %x\n" % [textsize, datasize, bsssize]
 end
 
+# Set base of each segment
+textbase = TEXTBASE
+database = (textbase + textsize).roundup(PAGEALIGN)   # Aligned to 0x1000 (4096) boundary
+bssbase = (database + datasize).roundup(WORDALIGN)    # Aligned to next word boundary after .data
+
+puts "\nBases: Text=%x, Data=%x, BSS=%x" % [textbase, database, bssbase]
+
 puts "\nSegments for output: =========================="
 output.segrecs.each do |seg|
   next if seg == nil
