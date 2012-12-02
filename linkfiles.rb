@@ -22,10 +22,22 @@ end
 
 output = ObjFile.new
 
+# Create sizes for each segment
+textsize = datasize = bsssize = 0
+
 inputs.each do |object|
-  object.segrecs.each do |seg|
-	output.segrecs << seg
-  end
+  puts "Visiting #{object.sourcefile}..."
+  
+  text = object.segrecs[object.segnames[".text"]]
+  textsize += text[:size] if text
+  
+  data = object.segrecs[object.segnames[".data"]]
+  datasize += data[:size] if data
+  
+  bss = object.segrecs[object.segnames[".bss"]]
+  bsssize += bss[:size] if bss
+  
+  puts "Text size: %x, Data size: %x, BSS size: %x\n" % [textsize, datasize, bsssize]
 end
 
 puts "\nSegments for output: =========================="
