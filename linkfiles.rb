@@ -60,6 +60,41 @@ bssbase = (database + datasize).roundup(WORDALIGN)    # Aligned to next word bou
 
 puts "\nBases: Text=%x, Data=%x, BSS=%x" % [textbase, database, bssbase]
 
+# Running bases for each segment
+tbase_offset = textbase; dbase_offset = database; bbase_offset = bssbase
+
+# Determine bases for segments in the linked output file
+inputs.each do |object|
+  puts "\nRevisiting #{object.sourcefile}..."
+  puts "Seg bases: Text=%x, Data=%x, BSS=%x" % [tbase_offset, dbase_offset, bbase_offset]
+  
+  text = object.segrecs[object.segnames[".text"]]
+  if text
+    text[:oldbase] = text[:base]
+    text[:base] = tbase_offset
+    
+    tbase_offset += text[:size].roundup(WORDALIGN)
+  end
+  
+  data = object.segrecs[object.segnames[".data"]]
+  if data
+    data[:oldbase] = data[:base]
+    data[:base] = dbase_offset
+    
+    dbase_offset += data[:size].roundup(WORDALIGN) 
+  end
+  
+  bss = object.segrecs[object.segnames[".bss"]]
+  if bss
+    bss[:oldbase] = bss[:base]
+    bss[:base] = bbase_offset
+    
+    bbase_offset += bss[:size].roundup(WORDALIGN)
+  end
+end
+
+puts "Ends of segments: Text=%x, Data=%x, BSS=%x" % [tbase_offset, dbase_offset, bbase_offset]
+
 puts "\nSegments for output: =========================="
 output.segrecs.each do |seg|
   next if seg == nil
