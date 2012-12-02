@@ -22,6 +22,18 @@ end
 
 output = ObjFile.new
 
+# Open the Integer class and add a roundup method
+class Integer
+  def roundup(roundval=1)
+    (self + roundval - 1) & -roundval
+  end
+end
+
+# Rounding values
+TEXTBASE = 0x1000   # Start of text segment
+PAGEALIGN = 0x1000  # Alignment for data
+WORDALIGN = 0x4     # Alignment for BSS and concatenated segments
+
 # Create sizes for each segment
 textsize = datasize = bsssize = 0
 
@@ -29,13 +41,13 @@ inputs.each do |object|
   puts "Visiting #{object.sourcefile}..."
   
   text = object.segrecs[object.segnames[".text"]]
-  textsize += text[:size] if text
+  textsize += text[:size].roundup(WORDALIGN) if text
   
   data = object.segrecs[object.segnames[".data"]]
-  datasize += data[:size] if data
+  datasize += data[:size].roundup(WORDALIGN) if data
   
   bss = object.segrecs[object.segnames[".bss"]]
-  bsssize += bss[:size] if bss
+  bsssize += bss[:size].roundup(WORDALIGN) if bss
   
   puts "Text size: %x, Data size: %x, BSS size: %x\n" % [textsize, datasize, bsssize]
 end
